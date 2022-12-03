@@ -39,6 +39,9 @@ async function onSearch(e) {
     );
     return;
   }
+  //   window.addEventListener('scroll', onScrollWindow, {
+  //     passive: true,
+  //   });
 
   loadMoreBtn.show();
   loadMoreBtn.disable();
@@ -72,16 +75,15 @@ async function featchImages() {
         lightbox.refresh();
       }
 
-      //   console.log(images);
+      console.log(images);
       return images.totalHits;
     })
     .then(totalHits => {
       const allItems = document.querySelectorAll('a.gallery__image');
-      //   console.log(allItems);
-
+      console.log(allItems);
       const totals = `${totalHits}` - `${allItems.length}`;
       Notify.success(`Hooray! We found more ${totals} images`);
-      //   console.log(totals);
+      console.log(totals);
       if (allItems.length === totalHits) {
         loadMoreBtn.hide();
         Notify.success(`Sorry! We have uploaded all images`);
@@ -102,3 +104,23 @@ function onLoadMore() {
 function clearPictureContainer() {
   refs.pictureContainer.innerHTML = '';
 }
+
+// function onScrollWindow() {
+//   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+
+//   if (scrollTop + clientHeight >= scrollHeight - 5) {
+//     featchImages();
+//   }
+// }
+
+// window.onscroll = function () {
+//   scrollFunction();
+// };
+
+// function scrollFunction() {
+//   if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+//     mybutton.style.display = 'flex';
+//   } else {
+//     mybutton.style.display = 'none';
+//   }
+// }

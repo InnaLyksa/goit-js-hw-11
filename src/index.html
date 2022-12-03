@@ -7,7 +7,7 @@
     <title>Homework 11</title>
   </head>
   <body>
-    <form class="form-search" id="form-search">
+    <form class="search-form" id="search-form">
       <input
         type="text"
         name="searchQuery"
@@ -19,10 +19,20 @@
 
     <div class="gallery" >
     </div>
-    <div class="point-infinite-scroll"></div>
+    <!-- <div class="point-infinite-scroll"></div> -->
     <!-- <div class="wrapper-loadmore">
       <button type="button" class="load-more">Load more</button>
     </div> -->
+
+    <button type="button" class="btn-primary button" data-action="load-more">
+      <!-- <span
+        class="spinner-border spinner-border-sm spinner is-hidden"
+        role="status"
+        aria-hidden="true"
+      ></span> -->
+
+      <span class="label">Load more</span>
+    </button>
     
     <script src="./index.js" type="module"></script>
     <!-- <script src="index-with-button.js" type="module"></script> -->
