@@ -69,10 +69,6 @@ function onSearch(e) {
       featchImages();
     }
   });
-
-  // await featchImages().then(images => {
-  //   loadMoreBtn.enable();
-  // });
 }
 
 async function featchImages() {
@@ -94,7 +90,7 @@ async function featchImages() {
         lightbox.refresh();
       }
 
-      console.log(images);
+      // console.log(images);
       return images.totalHits;
     })
     .then(totalHits => {
