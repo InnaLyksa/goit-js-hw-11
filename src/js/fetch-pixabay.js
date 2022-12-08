@@ -7,7 +7,6 @@ export default class PixabayAPI {
     this.searchQuery = '';
     this.page = 1;
     this.perPage = 40;
-    // this.limit = 500;
   }
 
   async featchImages() {
