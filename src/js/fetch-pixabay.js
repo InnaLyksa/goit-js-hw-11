@@ -6,7 +6,7 @@ export default class PixabayAPI {
   constructor() {
     this.searchQuery = '';
     this.page = 1;
-    this.perPage = 5;
+    this.perPage = 40;
     // this.limit = 500;
   }
 

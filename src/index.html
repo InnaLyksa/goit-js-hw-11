@@ -14,27 +14,47 @@
         autocomplete="off"
         placeholder="Search images..."
       />
-      <button type="submit">&#128269</button>
+      <button type="submit" class="btn-svg">
+        <svg class="icon-loupe">
+          <use href="./images/symbol-defs.svg#icon-loupe"></use>
+        </svg>
+      </button>
     </form>
-
-    <div class="gallery" >
+    </button>
+    <div class="gallery">
     </div>
-    <!-- <div class="point-infinite-scroll"></div> -->
-    <!-- <div class="wrapper-loadmore">
-      <button type="button" class="load-more">Load more</button>
-    </div> -->
+    
+    
 
-    <button type="button" class="btn-primary button" data-action="load-more">
-      <!-- <span
-        class="spinner-border spinner-border-sm spinner is-hidden"
-        role="status"
-        aria-hidden="true"
-      ></span> -->
+    <button type="button" class="btn-load-more" data-action="load-more">
+      
+      <svg width="20" heigth="20" class="spinner is-hidden">
+            <use href="./images/symbol-defs.svg#icon-spinner9"></use>
+          </svg>
 
       <span class="label">Load more</span>
     </button>
-    
+
+
+    <!-- <button type="button" class="btn-spiner is-hidden">
+          <svg width="20" heigth="20" class="loader-svg">
+            <use href="./images/symbol-defs.svg#icon-spinner9"></use>
+          </svg>
+        </button>
+
+
+<button type="button" class="btn-scroll-to-top" title="Go to top" data-action="scroll-to-top" id="scroll-to-top">
+          <svg width="40px" height="60">
+            <use
+              href="./images/symbol-defs.svg#icon-up-arrow"
+              width="40px"
+              height="60px"
+            ></use>
+          </svg>
+        </button> -->
+
     <script src="./index.js" type="module"></script>
-    <!-- <script src="index-with-button.js" type="module"></script> -->
+
+    <!-- <script src="index-with-scroll.js" type="module"></script> -->
   </body>
 </html>
