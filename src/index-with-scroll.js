@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import PixabayApiServise from './js/fetch-pixabay';
@@ -5,51 +6,70 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import createMarkup from './js/create-markup-image';
 import './css/styles.css';
 import LoadMoreBtn from './js/load-more-btn';
+import OnlyScroll from 'only-scrollbar';
+
+new OnlyScroll(document.scrollingElement, {
+  damping: 0.6,
+});
 
 const refs = {
   searchForm: document.querySelector('#search-form'),
   pictureContainer: document.querySelector('.gallery'),
+  spinerBtn: document.querySelector('.btn-spiner'),
 };
 
-const loadMoreBtn = new LoadMoreBtn({
-  selector: '[data-action="load-more"]',
+const OPTIONS_NOTIFICATION = {
+  position: 'right-top',
+  fontSize: '16px',
+  width: '350px',
+};
+
+const scrollToTopBtn = new LoadMoreBtn({
+  selector: '[data-action="scroll-to-top"]',
   hidden: true,
 });
 
-const lightbox = new SimpleLightbox('.gallery a', {
-  captionsData: 'alt',
-  captionDelay: 200,
-});
+const lightbox = new SimpleLightbox('.gallery a');
 
 const pixabayApiServise = new PixabayApiServise();
 
 refs.searchForm.addEventListener('submit', onSearch);
-loadMoreBtn.refs.button.addEventListener('click', onLoadMore);
 
 async function onSearch(e) {
   e.preventDefault();
-  clearPictureContainer();
+
+  refs.spinerBtn.classList.remove('is-hidden');
+
+  refs.pictureContainer.innerHTML = '';
 
   pixabayApiServise.query = e.currentTarget.elements.searchQuery.value;
-
   if (pixabayApiServise.query === '' || pixabayApiServise.query.length < 3) {
-    loadMoreBtn.hide();
     Notify.warning(
-      'Warning! Search must not be empty and includes more then 2 letters'
+      'Warning! Search must not be empty and includes more then 2 letters',
+      OPTIONS_NOTIFICATION
     );
+    refs.spinerBtn.classList.add('is-hidden');
     return;
   }
-  //   window.addEventListener('scroll', onScrollWindow, {
-  //     passive: true,
-  //   });
-
-  loadMoreBtn.show();
-  loadMoreBtn.disable();
-  refs.searchForm.reset();
   pixabayApiServise.resetPage();
+  refs.searchForm.reset();
 
-  await featchImages().then(images => {
-    loadMoreBtn.enable();
+  // await featchImages();
+  pixabayApiServise.featchImages().then(images => {
+    if (images.total === 0) {
+      refs.spinerBtn.classList.add('is-hidden');
+      Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.',
+        { position: 'center-center', fontSize: '35px', width: '600px' }
+      );
+      return;
+    } else {
+      Notify.success(
+        `Hooray! We found ${images.totalHits} images`,
+        OPTIONS_NOTIFICATION
+      );
+      featchImages();
+    }
   });
 }
 
@@ -58,11 +78,8 @@ async function featchImages() {
     .featchImages()
     .then(images => {
       if (images.total === 0) {
-        loadMoreBtn.hide();
+        refs.spinerBtn.classList.add('is-hidden');
         refs.pictureContainer.innerHTML = '';
-        Notify.failure(
-          'Sorry, there are no images matching your search query. Please try again.'
-        );
         return;
       } else {
         pixabayApiServise.incrementPage();
@@ -70,57 +87,59 @@ async function featchImages() {
           .map(image => createMarkup(image))
           .join('');
         refs.pictureContainer.insertAdjacentHTML('beforeend', createdImages);
-        // Notify.success(`Hooray! We found ${images.totalHits} images`);
-
         lightbox.refresh();
+        window.addEventListener('scroll', onScrollWindow, {
+          passive: true,
+        });
       }
-
-      console.log(images);
+      // console.log(images);
       return images.totalHits;
     })
     .then(totalHits => {
-      const allItems = document.querySelectorAll('a.gallery__image');
-      console.log(allItems);
-      const totals = `${totalHits}` - `${allItems.length}`;
-      Notify.success(`Hooray! We found more ${totals} images`);
-      console.log(totals);
-      if (allItems.length === totalHits) {
-        loadMoreBtn.hide();
-        Notify.success(`Sorry! We have uploaded all images`);
-      }
+      const allImages = document.querySelectorAll('a.gallery__image');
+      console.log(allImages);
+      if (allImages.length === totalHits) {
+        window.removeEventListener('scroll', onScrollWindow);
+        refs.spinerBtn.classList.add('is-hidden');
 
+        Notify.info(
+          "We're sorry, but you've reached the end of search results.",
+          {
+            position: 'center-center',
+            fontSize: '35px',
+            width: '600px',
+          }
+        );
+      }
       return totalHits;
     });
 }
 
-function onLoadMore() {
-  loadMoreBtn.disable();
+function onScrollWindow() {
+  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
 
-  featchImages().then(images => {
-    loadMoreBtn.enable();
+  if (scrollTop + clientHeight >= scrollHeight - 1) {
+    featchImages();
+  }
+}
+
+scrollFunction();
+
+function scrollFunction() {
+  const btn = $('#scroll-to-top');
+  $(window).on('scroll', function () {
+    if ($(window).scrollTop() > 300) {
+      scrollToTopBtn.show();
+    } else {
+      scrollToTopBtn.hide();
+    }
+  });
+  btn.on('click', function (e) {
+    e.preventDefault();
+    $('html, body').animate(
+      { scrollTop: $('#search-form').offset().top },
+      2000
+    );
+    // $('html, body').animate({ scrollTop: 0 }, 500);
   });
 }
-
-function clearPictureContainer() {
-  refs.pictureContainer.innerHTML = '';
-}
-
-// function onScrollWindow() {
-//   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-
-//   if (scrollTop + clientHeight >= scrollHeight - 5) {
-//     featchImages();
-//   }
-// }
-
-// window.onscroll = function () {
-//   scrollFunction();
-// };
-
-// function scrollFunction() {
-//   if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-//     mybutton.style.display = 'flex';
-//   } else {
-//     mybutton.style.display = 'none';
-//   }
-// }

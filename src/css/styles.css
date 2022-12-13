@@ -8,9 +8,11 @@
   align-items: center;
   gap: 20px;
   background-color: #3381ca;
-  position: fixed;
   width: 100%;
-  z-index: 10;
+
+  /* for load-more btn */
+  /* position: fixed;  */
+  /* z-index: 10; */
 }
 
 input {
@@ -46,20 +48,22 @@ input {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   grid-gap: 30px;
-  padding-top: 100px;
-  /* padding: 0;
-  margin: 0; */
   max-width: calc(100vw - 80px);
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 30px;
+
+  /* for load-more btn */
+  /* padding-top: 100px; */
+
+  /* for scroll */
+  padding-top: 10px;
 }
 
 .photo-card {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  /* width: calc((100% / 4) - 40px); */
 }
 
 img {
@@ -90,6 +94,8 @@ img:hover {
   margin-bottom: 8px;
 }
 
+/* styles for  btn-load-more */
+/* 
 .btn-load-more {
   display: block;
   margin-left: auto;
@@ -114,7 +120,7 @@ img:hover {
   margin-right: 8px;
 
   animation: rotation 1s infinite linear;
-}
+} */
 
 @keyframes rotation {
   from {
@@ -128,9 +134,10 @@ img:hover {
 
 /* ----------------- */
 /* styles for  infinite scroll */
-/* .btn-scroll-to-top { */
-/* display: none; */
-/* align-items: center;
+
+.btn-scroll-to-top {
+  /* display: none; */
+  align-items: center;
   justify-content: center;
   position: fixed;
   bottom: 15px;
@@ -138,22 +145,21 @@ img:hover {
   z-index: 100;
   border: none;
   outline: none;
-  background-color: #3381ca; */
-/* fill: white; */
-/* cursor: pointer; */
-/* padding: 15px; */
-/* border-radius: 5px;
+  background-color: #3381ca;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 5px;
   height: 80px;
-} */
+}
 
-/* .btn-scroll-to-top:hover {
+.btn-scroll-to-top:hover {
   fill: white;
-} */
+}
 
-/* .btn-scroll-to-top.is-hidden {
+.btn-scroll-to-top.is-hidden {
   display: none;
-} */
-/* .btn-spiner {
+}
+.btn-spiner {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -174,4 +180,4 @@ img:hover {
   fill: #fff;
 
   animation: rotation 1s infinite linear;
-} */
+}
